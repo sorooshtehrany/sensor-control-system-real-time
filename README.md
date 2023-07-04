@@ -52,7 +52,7 @@ Clone this repository to your local machine.
 
 Navigate to the directory where you cloned the repository.
 
-Create the Shared "library using g++ -m64 -shared -o control_system.dll control_system.cpp -lpthread"
+Create the Shared library using "g++ -m64 -shared -o control_system.dll control_system.cpp -lpthread"
 
 Install the required Python packages using "pip install -r requirements.txt"
 
