@@ -6,7 +6,7 @@ Compiler version:
 
 C++ file:
                 control_system.cpp
-                In this file, if you change the value of the #define TEST macro to 1, you can enable standalone testing in a main function. By default, the TEST macro is set to 0. By running the executable file standalone_test.exe, you can observe the output in the TEST mode. The control_system.dll file, compiled with the real mode, is located in the same directory.
+                In this file, if you change the value of the #define TEST macro to 1, you can enable standalone testing in a main function. By default, the TEST macro is set to 0. By running the executable file standalone_test.exe, you can observe the output in the TEST mode.
 
 python file:
                 control_system.py
