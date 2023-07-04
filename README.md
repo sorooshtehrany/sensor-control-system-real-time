@@ -1,95 +1,40 @@
-# Coding Assignment  
+# Solution
 
-Control System Simulation coding assignment for the **Senior Real-Time Machine Software Developer** [role](https://candidate.hr-manager.net/ApplicationInit.aspx?cid=2723&ProjectId=143591&DepartmentId=18965&MediaId=5&SkipAdvertisement=False) at [ATLANT 3D](https://www.atlant3d.com/).
+Compiler version:
+                g++ (Rev7, Built by MSYS2 project) 13.1.0
+                Python 3.11.4
 
-## Objective:
+C++ file:
+                control_system.cpp
+                In this file, if you change the value of the #define TEST macro to 1, you can enable standalone testing in a main function. By default, the TEST macro is set to 0. By running the executable file standalone_test.exe, you can observe the output in the TEST mode. The control_system.dll file, compiled with the real mode, is located in the same directory.
 
-Your task is to develop a simulation for a Control System. The simulation will be used to control the temperature and pressure of a machine. The machine has two sensors that provide real-time readings of the temperature and pressure. The machine also has two parameters that can be adjusted to control the temperature and pressure. The goal of the simulation is to control the temperature and pressure of the machine by adjusting the parameters based on the sensor readings.
+python file:
+                control_system.py
+                I have implemented three buttons in the interface:
+                Start: By default, we are in the start mode, and the graph displays movement. This button sends a command to the C++ code to initiate the process. 
+                Pause: This button allows pausing the graph and sends a command to the C++ code to pause the ongoing tasks.
+                Stop: Clicking this button terminates the program and sends a command to the C++ code to terminate all running tasks.
+                when the plot is close Ctrl+C can terminate the program in both sides
 
-## Setup Instructions
+log files:                
+                Running the program in the real mode(NOT TEST MODE) makes two log files. 1- temperature log.txt and 2- pressure log.txt. You can see some errors and machine parameters in the log files
 
-1. Install the latest version of Python.
+flow of program:
+                In the C++ side, the control circle can be initiated from the base class DataSampler, which has two derivatives. This class consists of three parameters: signal, noise, and control signal. The task of this class is to generate a noise signal every 100 ms at regular intervals.
 
-2. Install a C++ compiler. If you're using Windows, you can install MinGW. If you're using macOS, you can install the Xcode command line tools. If you're using Linux, you can install the `g++` package using your package manager.
+                The PID controller task is synchronized with the data sampler using an event mechanism. It calculates the control signal and places it in a queue for the adjustment task.
 
-3. Clone this repository to your local machine.
+                The adjustment task receives the control signal and sends it to two override functions for temperature and pressure, which calculate the adjustment signal and log the results in a file. 
 
-4. Navigate to the directory where you cloned the repository.
+                The ControlSystem serves as the main interface with Python. It creates three tasks for each parameter, resulting in a total of six tasks, and initializes them using their respective constructors. 
 
-5. Create the Shared library using `g++ -m64 -shared -o control_system.dll control_system.cpp -lpthread`.
 
-7. Install the required Python packages using `pip install -r requirements.txt`.
+                In the Python side, the ControlSystem class acts as the simulation machine with a global object named 'cs'. It runs the machine and retrieves its parameters.
 
-6. Run the python file using `python control_system.py`
+                
+                The "get_sensor_data" function retrieves the machine parameters and pushes them into a queue. 
 
-You should see the following graph showing the real-time simulated temperature and pressure values of the system. However, as you can observe, as there is no control system implemented yet, the temperature and pressure values are not being controlled.
+                The "update_plot" function displays the graphs and prints the machine parameters on the screen.
+                
+                Each button is associated with its respective event handler and triggers the necessary actions when the button is clicked.
 
-![Image](control_system.png)
-
-## Requirements:
-
-### C++ Component 
-
-Develop the core simulation engine in C++.
-
-- You are provided a starting point in the file `control_system.cpp`.
-
-- There are classes to model the Sensors, Controllers, and Control System. You may modify these classes as necessary, or add new classes depending on your solution.
-
-- You may modify the model to generate the temperature and pressure sensor values in `run()`.
-
-- Implement real-time control mechanisms to adjust machine parameters based on sensor inputs in the function `control()`. You may modify the PID controller as necessary, or implement a different controller.
-
-- Implement multi-threading in your simulation, with one thread handling sensor input, another handling the PID controller, and another handling parameter adjustment.
-
-- Implement data logging to a file in your simulation. The file should contain the sensor readings, machine parameters, and the time at which they were recorded.
-
-### Python Component
-
-Develop a Python interface for the simulation engine.
-
-- You are provided a starting point in the file `control_system.py`. This file imports the C++ Shared library, calls the `run()` function and displays the sensor readings and machine parameters in real-time using matplotlib.
-
-- Display real-time updates of the sensor readings and machine parameters over time during the simulation.
-
-- Implement functionality to start, stop, and pause the simulation from the Python interface.
-
-## Evaluation Criteria
-
-Your solution will be evaluated on the following criteria:
-
-- Correctness and completeness of the simulation.
-
-- Use of object-oriented principles in the design of the simulation engine.
-
-- Efficiency of the real-time control mechanisms.
-
-- Usability and functionality of the Python interface.
-
-- Quality of the code (including readability, comments, and adherence to coding standards).
-
-- Handling of potential errors or exceptional conditions in the system.
-
-- Add any tests you have written for your code either for the C++ component or the Python component.
-
-- **You may choose to work more on the simulation engine component in C++ for this job role**. However, you are expected to have a basic understanding of both components.
-
-## Submission Instructions
-
-1. Fork this repository to your own GitHub account and make the forked repository private.
-
-2. Clone the forked repository to your local machine.
-
-3. Commit your changes to a new branch with the name `solution`.
-
-4. Push your branch to the repository.
-
-5. In your private repository, open a pull request from your branch to the `main` branch.
-
-6. In the pull request description, provide a brief explanation of your solution and any decisions you made while developing it.
-
-7. Finally, add the user of this repository as a collaborator to your private repository so that we can review your solution.
-
-Please note: Do not open a pull request in the original public repository. Your solution should be submitted in your private repository only.
-
-Please submit your complete code files along with a README that explains how to run your simulation. Include any assumptions or design decisions you made while developing the simulation.
